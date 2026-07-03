@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanzas familiares</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/estilos.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css"/>
+    <script src="https://unpkg.com/leaflet-geosearch@latest/dist/bundle.min.js"></script>
+</head>
+<body>
+
+    <header class="cabecera">
+        <p class="cabecera_remitente">Correspondencia familiar</p>
+        <h1 class="cabecera_titulo">Finanzas en casa</h1>
+    </header>
+
+    <main class="contenedor">
+
+        <!-- ============ CREAR MOVIMIENTO ============ -->
+        <details class="hoja hoja--ingreso" open>
+            <summary class="hoja_encabezado">
+                <span class="hoja_sello" aria-hidden="true">✉</span>
+                <span class="hoja_titulo">Registrar movimiento</span>
+                <span class="hoja_flecha" aria-hidden="true">▾</span>
+            </summary>
+
+            <div class="hoja_cuerpo">
+                <form id="crear_movimiento_enviar" class="formulario">
+
+                    <div class="campo">
+                        <label for="crear_movimiento_usuario">¿Quién hizo el movimiento?</label>
+                        <select id="crear_movimiento_usuario" required></select>
+                    </div>
+
+                    <div class="campo">
+                        <label for="crear_movimiento_ubicacion">¿Dónde fue?</label>
+                        <ul id="crear_movimiento_ubicacion" class="arbol_selector" required></ul>
+                    </div>
+
+                    <div class="campo">
+                        <label for="crear_movimiento_etiqueta">¿Que etiqueta tiene?</label>
+                        <ul id="crear_movimiento_etiqueta" class="arbol_selector"></ul>
+                    </div>
+
+                    <div class="campo">
+                        <label for="crear_movimiento_descripcion">¿Qué fue?</label>
+                        <input type="text" id="crear_movimiento_descripcion" placeholder="Ej. Despensa de la semana" required>
+                    </div>
+
+                    <div class="campo campo--mitad">
+                        <label for="crear_movimiento_monto">¿Cuánto?</label>
+                        <div class="campo_con_prefijo">
+                            <span class="campo_prefijo">$</span>
+                            <input type="number" id="crear_movimiento_monto" placeholder="100.00" step="0.01" required>
+                        </div>
+                    </div>
+
+                    <div class="campo campo--mitad">
+                        <label for="crear_movimiento_tipo">Tipo</label>
+                        <select id="crear_movimiento_tipo" required>
+                            <option value="ingreso">Ingreso</option>
+                            <option value="egreso">Egreso</option>
+                            <option value="referencia">Referencia</option>
+                        </select>
+                    </div>
+
+                    <div class="campo">
+                        <label for="crear_movimiento_fecha">¿Cuándo?</label>
+                        <input type="datetime-local" id="crear_movimiento_fecha" required>
+                    </div>
+
+                    <div class="campo">
+                        <label for="crear_movimiento_nota">Nota (opcional)</label>
+                        <input type="text" id="crear_movimiento_nota" placeholder="El producto me pareció...">
+                    </div>
+
+                    <div class="campo campo--calidad">
+                        <label for="crear_movimiento_calidad" id="crear_movimiento_display_calidad">Calidad: sin calificar</label>
+                        <input type="range" min="1" max="3" id="crear_movimiento_calidad">
+                    </div>
+
+                    <input type="submit" class="boton boton--enviar" value="Enviar movimiento">
+                </form>
+
+                <div id="crear_movimiento_confirmacion" class="confirmacion"></div>
+            </div>
+        </details>
+
+        <!-- ============ CREAR USUARIO ============ -->
+        <details class="hoja hoja--neutra">
+            <summary class="hoja_encabezado">
+                <span class="hoja_sello" aria-hidden="true">＋</span>
+                <span class="hoja_titulo">Agregar persona</span>
+                <span class="hoja_flecha" aria-hidden="true">▾</span>
+            </summary>
+
+            <div class="hoja_cuerpo">
+                <form id="crear_usuario_enviar_nombre" class="formulario">
+
+                    <div class="campo">
+                        <label for="crear_usuario_nombre">Nombre</label>
+                        <input type="text" id="crear_usuario_nombre" placeholder="Ej. Mamá, Luis, Abuela...">
+                    </div>
+
+                    <div class="campo campo--color">
+                        <label for="crear_usuario_color">Color para identificarla en las gráficas</label>
+                        <input type="color" id="crear_usuario_color" value="#3a5a8c">
+                    </div>
+
+                    <input type="submit" class="boton boton--enviar" value="Agregar persona">
+                </form>
+            </div>
+        </details>
+
+        <!-- ============ CREAR UBICACION ============ -->
+        <details class="hoja hoja--neutra">
+            <summary class="hoja_encabezado">
+                <span class="hoja_sello" aria-hidden="true">📍</span>
+                <span class="hoja_titulo">Agregar ubicación</span>
+                <span class="hoja_flecha" aria-hidden="true">▾</span>
+            </summary>
+
+            <div class="hoja_cuerpo">
+                <div class="crear_ubicacion">
+                    <p class="campo_etiqueta campo_etiqueta--mapa">Busca una dirección o toca el mapa para marcar el lugar</p>
+
+                    <div class="mapa_marco">
+                        <div id="mapa"></div>
+                    </div>
+
+                    <input type="button" id="mapa_enviar" class="boton boton--enviar" value="Guardar ubicación">
+                    <div id="mapa_confirmacion" class="confirmacion"></div>
+                </div>
+            </div>
+        </details>
+
+        <!-- ============ CREAR ETIQUETA ============ -->
+        <details class="hoja hoja--neutra">
+            <summary class="hoja_encabezado">
+                <span class="hoja_sello" aria-hidden="true">🏷</span>
+                <span class="hoja_titulo">Crear etiqueta</span>
+                <span class="hoja_flecha" aria-hidden="true">▾</span>
+            </summary>
+
+            <div class="hoja_cuerpo">
+                <form id="crear_etiqueta_enviar" class="formulario">
+
+                    <div class="campo">
+                        <label for="crear_etiqueta">Nueva etiqueta</label>
+                        <input type="text" id="crear_etiqueta" placeholder="Ej. Súper, Gasolina, Escuela...">
+                    </div>
+
+                    <div class="campo">
+                        <label for="crear_etiqueta_padre">Etiqueta padre (opcional)</label>
+                        <input type="text" id="crear_etiqueta_padre" list="crear_etiqueta_padre_lista" placeholder="Ej. Comida">
+                        <datalist id="crear_etiqueta_padre_lista"></datalist>
+                    </div>
+
+                    <input type="submit" class="boton boton--enviar" value="Crear etiqueta">
+                </form>
+            </div>
+        </details>
+
+        <!-- ============ LEER DATOS ============ -->
+        <details class="hoja hoja--egreso">
+            <summary class="hoja_encabezado">
+                <span class="hoja_sello" aria-hidden="true">🔍</span>
+                <span class="hoja_titulo">Consultar movimientos</span>
+                <span class="hoja_flecha" aria-hidden="true">▾</span>
+            </summary>
+
+            <div class="hoja_cuerpo">
+                <form id="leer_datos_enviar" class="formulario formulario--filtros">
+
+                    <div class="campo">
+                        <span class="campo_etiqueta">Personas</span>
+                        <div id="leer_datos_usuario" data-nombre="usuarios" class="grupo_checkbox"></div>
+                    </div>
+
+                    <div class="campo">
+                        <span class="campo_etiqueta">Lugares</span>
+                        <div id="leer_datos_ubicacion" data-nombre="ubicaciones" class="grupo_checkbox"></div>
+                    </div>
+
+                    <div class="campo">
+                        <span class="campo_etiqueta">Tipo de movimiento</span>
+                        <div id="leer_datos_tipo" data-nombre="tipos" class="grupo_checkbox">
+                            <label for="leer_datos_referencia">Referencia
+                                <input type="checkbox" id="leer_datos_referencia" value="referencia">
+                            </label>
+                            <label for="leer_datos_ingreso">Ingreso
+                                <input type="checkbox" id="leer_datos_ingreso" value="ingreso">
+                            </label>
+                            <label for="leer_datos_egreso">Egreso
+                                <input type="checkbox" id="leer_datos_egreso" value="egreso">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="campo">
+                        <span class="campo_etiqueta">Etiquetas</span>
+                        <div id="leer_datos_etiqueta" data-nombre="etiquetas" class="grupo_checkbox"></div>
+                    </div>
+
+                    <div id="leer_datos_fecha" class="campo campo--fechas">
+                        <label for="leer_datos_fecha_inicio">Desde
+                            <input type="datetime-local" id="leer_datos_fecha_inicio">
+                        </label>
+                        <label for="leer_datos_fecha_fin">Hasta
+                            <input type="datetime-local" id="leer_datos_fecha_fin">
+                        </label>
+                    </div>
+
+                    <input type="submit" class="boton boton--buscar" value="Buscar movimientos">
+                </form>
+
+                <div id="leer_datos_display" class="resultados">
+                    <div class="resultados_grafica">
+                        <canvas id="leer_datos_grafica"></canvas>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+    </main>
+
+    <script src="/static/crear_ubicacion.js"></script>
+    <script src="/static/crear_etiqueta.js"></script>
+
+    <script src="/static/crear_movimiento.js"></script>
+
+    <script> 
+            const botton = document.getElementById("crear_usuario_enviar_nombre")
+            botton.addEventListener("submit", (evento) => {
+                evento.preventDefault()
+
+                const mensaje = {
+                    nombre: document.getElementById("crear_usuario_nombre").value,
+                    color: document.getElementById("crear_usuario_color").value
+                }
+
+                fetch("/crear_usuario", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(mensaje)
+                })
+                document.getElementById("crear_usuario_enviar_nombre").reset()
+            })
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/leer_datos.js"></script>
+</body>
+</html>

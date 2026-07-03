@@ -1,0 +1,741 @@
+/* =========================================================================
+   FINANZAS FAMILIARES — hoja de estilos
+   Concepto: correspondencia familiar. Cada sección es una hoja de papel.
+   Azul = ingreso (tinta de sello postal). Rojo = egreso (sello urgente).
+   ========================================================================= */
+
+:root {
+    /* Color */
+    --papel: #FAF6EE;
+    --papel-sombra: #EDE6D6;
+    --tinta: #2B2B28;
+    --tinta-suave: #6B6657;
+
+    --azul: #3A5A8C;
+    --azul-suave: #DCE4F0;
+    --azul-oscuro: #28406A;
+
+    --rojo: #A6443A;
+    --rojo-suave: #F2DCD8;
+    --rojo-oscuro: #7C312A;
+
+    --neutro: #8A8470;
+    --neutro-suave: #ECE7D9;
+
+    --linea: #C9BFA8;
+    --linea-fuerte: #A89F86;
+
+    /* Tipografia */
+    --fuente-titulo: "Fraunces", Georgia, serif;
+    --fuente-cuerpo: "Source Sans 3", system-ui, sans-serif;
+
+    /* Espaciado */
+    --radio: 10px;
+    --sombra-hoja: 0 1px 2px rgba(43, 43, 40, 0.06), 0 6px 16px rgba(43, 43, 40, 0.08);
+    --sombra-hoja-hover: 0 2px 4px rgba(43, 43, 40, 0.08), 0 10px 24px rgba(43, 43, 40, 0.10);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: var(--papel-sombra);
+    background-image:
+        radial-gradient(circle at 20% 10%, rgba(58, 90, 140, 0.05), transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(166, 68, 58, 0.05), transparent 45%);
+    color: var(--tinta);
+    font-family: var(--fuente-cuerpo);
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* =========================================================================
+   CABECERA
+   ========================================================================= */
+
+.cabecera {
+    padding: 2.25rem 1.25rem 1.5rem;
+    text-align: center;
+}
+
+.cabecera_remitente {
+    margin: 0 0 0.35rem;
+    font-family: var(--fuente-cuerpo);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+}
+
+.cabecera_titulo {
+    margin: 0;
+    font-family: var(--fuente-titulo);
+    font-weight: 500;
+    font-size: clamp(1.9rem, 6vw, 2.6rem);
+    letter-spacing: -0.01em;
+}
+
+/* =========================================================================
+   CONTENEDOR
+   ========================================================================= */
+
+.contenedor {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 1rem 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* =========================================================================
+   SISTEMA "HOJA" — cada sección es una hoja de papel desplegable
+   ========================================================================= */
+
+.hoja {
+    background-color: var(--papel);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra-hoja);
+    border: 1px solid var(--linea);
+    overflow: hidden;
+}
+
+.hoja_encabezado {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.1rem 1.25rem;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    transition: background-color 0.15s ease;
+}
+
+.hoja_encabezado::-webkit-details-marker {
+    display: none;
+}
+
+.hoja_encabezado:hover {
+    background-color: var(--papel-sombra);
+}
+
+.hoja_sello {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    flex-shrink: 0;
+    border-radius: 50%;
+    font-size: 1.05rem;
+    background-color: var(--neutro-suave);
+    color: var(--neutro);
+}
+
+.hoja--ingreso .hoja_sello {
+    background-color: var(--azul-suave);
+    color: var(--azul);
+}
+
+.hoja--egreso .hoja_sello {
+    background-color: var(--rojo-suave);
+    color: var(--rojo);
+}
+
+.hoja_titulo {
+    flex: 1;
+    font-family: var(--fuente-titulo);
+    font-weight: 500;
+    font-size: 1.15rem;
+}
+
+.hoja_flecha {
+    color: var(--tinta-suave);
+    font-size: 0.8rem;
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+.hoja[open] > .hoja_encabezado .hoja_flecha {
+    transform: rotate(180deg);
+}
+
+.hoja_cuerpo {
+    padding: 0.25rem 1.25rem 1.5rem;
+    border-top: 1px dashed var(--linea);
+}
+
+/* =========================================================================
+   FORMULARIOS
+   ========================================================================= */
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding-top: 1.25rem;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.campo label,
+.campo_etiqueta {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--tinta-suave);
+}
+
+.campo input[type="text"],
+.campo input[type="number"],
+.campo input[type="date"],
+.campo input[type="datetime-local"],
+.campo select {
+    font-family: var(--fuente-cuerpo);
+    font-size: 1rem;
+    color: var(--tinta);
+    background-color: transparent;
+    border: none;
+    border-bottom: 1.5px solid var(--linea-fuerte);
+    padding: 0.5rem 0.1rem;
+    outline: none;
+    transition: border-color 0.15s ease;
+    appearance: none;
+    border-radius: 0;
+}
+
+.campo select {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%236B6657' stroke-width='1.5'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 0.1rem center;
+    padding-right: 1.2rem;
+}
+
+.campo input:focus,
+.campo select:focus {
+    border-bottom-color: var(--azul);
+}
+
+.campo input::placeholder {
+    color: var(--linea-fuerte);
+}
+
+.campo--mitad {
+    display: inline-flex;
+}
+
+.campo_con_prefijo {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    border-bottom: 1.5px solid var(--linea-fuerte);
+}
+
+.campo_con_prefijo:focus-within {
+    border-bottom-color: var(--azul);
+}
+
+.campo_con_prefijo .campo_prefijo {
+    font-size: 1rem;
+    color: var(--tinta-suave);
+}
+
+.campo_con_prefijo input {
+    border-bottom: none !important;
+    flex: 1;
+    min-width: 0;
+}
+
+.campo--calidad input[type="range"] {
+    width: 100%;
+    accent-color: var(--azul);
+}
+
+.campo--color input[type="color"] {
+    width: 3rem;
+    height: 2.2rem;
+    border: 1.5px solid var(--linea-fuerte);
+    border-radius: 6px;
+    background: none;
+    padding: 2px;
+    cursor: pointer;
+}
+
+/* Pares de campos lado a lado en pantallas no-mobile */
+.formulario:has(.campo--mitad) {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+}
+
+/* =========================================================================
+   UBICACION — mapa interactivo (Leaflet toma control total de #mapa,
+   así que solo podemos vestir el marco que lo rodea y sobreescribir
+   los estilos nativos de sus controles)
+   ========================================================================= */
+
+.crear_ubicacion {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 1.25rem;
+}
+
+.campo_etiqueta--mapa {
+    margin: 0;
+}
+
+.mapa_marco {
+    border-radius: var(--radio);
+    overflow: hidden;
+    border: 1px solid var(--linea);
+    box-shadow: var(--sombra-hoja);
+}
+
+#mapa {
+    height: 320px;
+    width: 100%;
+}
+
+/* Controles nativos de Leaflet — leaflet.css se carga despues de este
+   archivo, asi que necesitamos !important para ganar la especificidad */
+.leaflet-control-zoom a {
+    background-color: var(--papel) !important;
+    color: var(--tinta) !important;
+    border-color: var(--linea) !important;
+}
+
+.leaflet-control-zoom a:hover {
+    background-color: var(--papel-sombra) !important;
+}
+
+.leaflet-bar {
+    border-color: var(--linea) !important;
+    box-shadow: var(--sombra-hoja) !important;
+}
+
+.leaflet-control-geosearch.bar form {
+    background-color: var(--papel) !important;
+    border: 1.5px solid var(--linea-fuerte) !important;
+    border-radius: 999px !important;
+    box-shadow: var(--sombra-hoja) !important;
+}
+
+.leaflet-control-geosearch.bar form input {
+    font-family: var(--fuente-cuerpo) !important;
+    color: var(--tinta) !important;
+    background: transparent !important;
+}
+
+.leaflet-control-geosearch .results {
+    font-family: var(--fuente-cuerpo) !important;
+    background-color: var(--papel) !important;
+    border: 1px solid var(--linea) !important;
+    border-radius: 8px !important;
+}
+
+.leaflet-control-geosearch .results > * {
+    color: var(--tinta) !important;
+}
+
+.leaflet-control-geosearch .results > *:hover {
+    background-color: var(--azul-suave) !important;
+}
+
+.leaflet-popup-content-wrapper {
+    background-color: var(--papel) !important;
+    color: var(--tinta) !important;
+    font-family: var(--fuente-cuerpo) !important;
+    border-radius: var(--radio) !important;
+}
+
+.leaflet-popup-tip {
+    background-color: var(--papel) !important;
+}
+
+/* Confirmación de ubicación: input de texto + botón que el JS inyecta */
+#mapa_confirmacion:empty {
+    display: none;
+}
+
+#mapa_confirmacion input[type="text"] {
+    display: block;
+    width: 100%;
+    font-family: var(--fuente-cuerpo);
+    font-size: 1rem;
+    color: var(--tinta);
+    background-color: transparent;
+    border: none;
+    border-bottom: 1.5px solid var(--linea-fuerte);
+    padding: 0.5rem 0.1rem;
+    outline: none;
+    margin-bottom: 0.75rem;
+}
+
+#mapa_confirmacion input[type="text"]:focus {
+    border-bottom-color: var(--azul);
+}
+
+#mapa_confirmacion input[type="button"] {
+    appearance: none;
+    border: none;
+    border-radius: 999px;
+    padding: 0.7rem 1.4rem;
+    font-family: var(--fuente-cuerpo);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background-color: var(--azul);
+    color: var(--papel);
+}
+
+#mapa_confirmacion input[type="button"]:hover {
+    background-color: var(--azul-oscuro);
+}
+
+/* =========================================================================
+   ARBOL SELECTOR — ubicacion y etiqueta (reemplaza al <select> plano;
+   cada nodo es un <ul> con 3 hijos directos: flecha, cajita y texto)
+   ========================================================================= */
+
+.arbol_selector,
+.arbol_selector ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.arbol_selector {
+    border: 1px solid var(--linea);
+    border-radius: var(--radio);
+    background-color: var(--papel);
+    padding: 0.4rem 0.5rem;
+    max-height: 12rem;
+    overflow-y: auto;
+    font-size: 0.92rem;
+}
+
+/* Cada nivel anidado se indenta con su propia linea vertical, tipo
+   explorador de archivos */
+.arbol_selector ul {
+    margin-left: 0.9rem;
+    padding-left: 0.75rem;
+    padding-top: 0.3rem;
+    padding-bottom: 0.05rem;
+    border-left: 1.5px dashed var(--linea);
+}
+
+/* Flecha: solo colapsa/expande. Se oculta (pero conserva su espacio,
+   para que el texto de todos los nodos quede alineado) si el nodo no
+   tiene hijos */
+.arbol_flecha {
+    display: inline-block;
+    width: 0.9em;
+    margin-right: 0.2rem;
+    font-size: 0.65em;
+    color: var(--tinta-suave);
+    cursor: pointer;
+    transform: rotate(90deg); /* apuntando hacia el texto = expandido, estado por defecto */
+    transition: transform 0.15s ease;
+}
+
+.arbol_selector ul:not(:has(> ul)) > .arbol_flecha {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.arbol_selector ul.colapsada > .arbol_flecha {
+    transform: rotate(0deg);
+}
+
+.arbol_selector ul.colapsada > ul {
+    display: none;
+}
+
+/* Cajita: solo selecciona. Se comporta como radio button (una sola
+   activa en todo el árbol), controlado por JS con la clase "seleccionada" */
+.arbol_cajita {
+    display: inline-block;
+    width: 0.8em;
+    height: 0.8em;
+    margin-right: 0.45rem;
+    border: 1.5px solid var(--linea-fuerte);
+    border-radius: 4px;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+
+.arbol_cajita.seleccionada {
+    background-color: var(--azul);
+    border-color: var(--azul);
+}
+
+.arbol_texto {
+    cursor: pointer;
+    color: var(--tinta);
+    transition: color 0.12s ease;
+}
+
+.arbol_selector ul:hover > .arbol_texto {
+    color: var(--azul);
+}
+
+.arbol_selector ul:hover > .arbol_cajita:not(.seleccionada) {
+    border-color: var(--azul);
+}
+
+/* =========================================================================
+   GRUPOS DE CHECKBOX (filtros de leer_datos)
+   ========================================================================= */
+
+.grupo_checkbox {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.grupo_checkbox label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.75rem;
+    border: 1.5px solid var(--linea-fuerte);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--tinta-suave);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.grupo_checkbox input[type="checkbox"] {
+    accent-color: var(--azul);
+    margin: 0;
+}
+
+.grupo_checkbox label:has(input:checked) {
+    background-color: var(--azul-suave);
+    border-color: var(--azul);
+    color: var(--azul-oscuro);
+}
+
+.campo--fechas {
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.campo--fechas label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--tinta-suave);
+    flex: 1;
+    min-width: 130px;
+}
+
+.campo--fechas input {
+    font-family: var(--fuente-cuerpo);
+    font-size: 0.95rem;
+    border: none;
+    border-bottom: 1.5px solid var(--linea-fuerte);
+    padding: 0.4rem 0.1rem;
+    background: transparent;
+    outline: none;
+}
+
+.campo--fechas input:focus {
+    border-bottom-color: var(--azul);
+}
+
+/* =========================================================================
+   BOTONES
+   ========================================================================= */
+
+.boton {
+    -webkit-appearance: none;
+    appearance: none;
+    border: none;
+    border-radius: 999px;
+    padding: 0.8rem 1.5rem;
+    font-family: var(--fuente-cuerpo);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.15s ease;
+    margin-top: 0.25rem;
+}
+
+.boton:active {
+    transform: scale(0.98);
+}
+
+.boton--enviar {
+    background-color: var(--azul);
+    color: var(--papel);
+}
+
+.boton--enviar:hover {
+    background-color: var(--azul-oscuro);
+}
+
+.boton--buscar {
+    background-color: var(--rojo);
+    color: var(--papel);
+}
+
+.boton--buscar:hover {
+    background-color: var(--rojo-oscuro);
+}
+
+/* =========================================================================
+   CONFIRMACION (placeholder visual — la animación de sello vendrá después)
+   ========================================================================= */
+
+.confirmacion:empty {
+    display: none;
+}
+
+.confirmacion {
+    margin-top: 1.25rem;
+    padding: 1rem 1.25rem;
+    background-color: var(--papel-sombra);
+    border: 1px dashed var(--linea-fuerte);
+    border-radius: var(--radio);
+    font-size: 0.92rem;
+}
+
+.confirmacion li {
+    margin-bottom: 0.3rem;
+}
+
+.confirmacion input[type="button"] {
+    appearance: none;
+    border: 1.5px solid var(--linea-fuerte);
+    background: var(--papel);
+    border-radius: 999px;
+    padding: 0.55rem 1.1rem;
+    font-family: var(--fuente-cuerpo);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.confirmacion input[type="button"]#confirmar {
+    background-color: var(--azul);
+    border-color: var(--azul);
+    color: var(--papel);
+}
+
+/* =========================================================================
+   RESULTADOS (tabla + grafica)
+   ========================================================================= */
+
+.resultados {
+    margin-top: 1.5rem;
+}
+
+.resultados_grafica {
+    background-color: var(--papel);
+    border: 1px solid var(--linea);
+    border-radius: var(--radio);
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+#leer_datos_tabla {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+#leer_datos_tabla thead th {
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--tinta-suave);
+    padding: 0.5rem 0.6rem;
+    border-bottom: 2px solid var(--linea-fuerte);
+    position: sticky;
+    top: 0;
+    background-color: var(--papel);
+}
+
+#leer_datos_tabla tbody th,
+#leer_datos_tabla tbody td {
+    padding: 0.55rem 0.6rem;
+    border-bottom: 1px solid var(--linea);
+    white-space: nowrap;
+}
+
+#leer_datos_tabla tbody tr {
+    cursor: pointer;
+    transition: background-color 0.12s ease;
+}
+
+#leer_datos_tabla tbody tr:hover {
+    background-color: var(--azul-suave);
+}
+
+#leer_datos_tabla tbody tr:active {
+    background-color: var(--azul-suave);
+    filter: brightness(0.95);
+}
+
+/* Scroll horizontal en mobile sin romper layout */
+#leer_datos_display {
+    overflow-x: auto;
+}
+
+/* =========================================================================
+   RESPONSIVE — desktop como caso secundario
+   ========================================================================= */
+
+@media (min-width: 640px) {
+    .formulario:has(.campo--mitad) {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .campo:not(.campo--mitad) {
+        grid-column: 1 / -1;
+    }
+
+    .contenedor {
+        padding: 0 1.5rem 4rem;
+    }
+}
+
+@media (min-width: 860px) {
+    .contenedor {
+        max-width: 760px;
+    }
+}
+
+/* =========================================================================
+   ACCESIBILIDAD
+   ========================================================================= */
+
+:focus-visible {
+    outline: 2px solid var(--azul);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+}
